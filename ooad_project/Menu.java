@@ -13,35 +13,29 @@ public class Menu {
         categories = new HashMap<>();
         prices = new HashMap<>();
 
-        // หมวดหมู่ Hot Coffee
+        // หมวดหมู่ต่างๆ และราคาสินค้า
         categories.put("Hot Coffee", new String[] { "Hot Americano", "Hot Latte", "Hot Cappuccino", "Hot Mocha" });
         prices.put("Hot Coffee", new int[] { 40, 45, 45, 45 });
 
-        // หมวดหมู่ Iced Coffee
         categories.put("Iced Coffee",
                 new String[] { "Iced Espresso", "Iced Americano", "Iced Latte", "Iced Cappuccino", "Iced Mocha" });
         prices.put("Iced Coffee", new int[] { 50, 50, 50, 50, 50 });
 
-        // หมวดหมู่ Hot Tea
         categories.put("Hot Tea",
                 new String[] { "Hot Green Tea", "Hot Matcha Latte", "Hot Thai Tea", "Hot Peach Tea", "Hot Black Tea" });
         prices.put("Hot Tea", new int[] { 45, 50, 45, 45, 45 });
 
-        // หมวดหมู่ Iced Tea
         categories.put("Iced Tea", new String[] { "Iced Green Tea", "Iced Matcha Latte", "Iced Thai Tea",
                 "Iced Peach Tea", "Iced Black Tea" });
         prices.put("Iced Tea", new int[] { 50, 55, 50, 50, 50 });
 
-        // หมวดหมู่ Hot Non-Coffee
         categories.put("Hot Non-Coffee", new String[] { "Hot Milk", "Hot Cocoa", "Hot Honey Lemon" });
         prices.put("Hot Non-Coffee", new int[] { 45, 45, 45 });
 
-        // หมวดหมู่ Iced Non-Coffee
         categories.put("Iced Non-Coffee",
                 new String[] { "Iced Milk", "Iced Cocoa", "Iced Honey Lemon", "Iced Italian Soda", "Iced Cocoa Dark" });
         prices.put("Iced Non-Coffee", new int[] { 50, 50, 50, 50, 50 });
 
-        // หมวดหมู่ Special
         categories.put("Special", new String[] { "Iced Black x Yuzu", "Iced Black Stone", "Iced Brick Stone",
                 "Iced Peach Lover", "Iced Yuzu Lover" });
         prices.put("Special", new int[] { 65, 60, 60, 65, 65 });
@@ -52,21 +46,13 @@ public class Menu {
         System.out.println("           MENU CATEGORIES");
         System.out.println("===================================");
         int index = 1;
-        // แสดงหมวดหมู่ตามลำดับที่ต้องการ
-        String[] sortedCategories = {
-                "Hot Coffee",
-                "Iced Coffee",
-                "Hot Tea",
-                "Iced Tea",
-                "Hot Non-Coffee",
-                "Iced Non-Coffee",
-                "Special"
-        };
+        String[] sortedCategories = { "Hot Coffee", "Iced Coffee", "Hot Tea", "Iced Tea", "Hot Non-Coffee",
+                "Iced Non-Coffee", "Special" };
         for (String category : sortedCategories) {
             System.out.println(index + ". " + category);
             index++;
         }
-        System.out.println("8. Back"); // เพิ่มตัวเลือก '8' เพื่อย้อนกลับไปที่เมนูหลัก
+        System.out.println("8. Back");
         System.out.println("===================================");
     }
 
@@ -80,14 +66,14 @@ public class Menu {
             for (int i = 0; i < items.length; i++) {
                 System.out.println((i + 1) + ". " + items[i] + " - $" + itemPrices[i]);
             }
-            System.out.println("9. Back"); // เพิ่มตัวเลือก '9' เพื่อย้อนกลับ
+            System.out.println("9. Back");
             System.out.println("===================================");
         } else {
             System.out.println("Invalid category.");
         }
     }
 
-    public void selectCategory(Cart cart, Member member, Receipt receipt, Promotion promotion) {
+    public void selectCategory(Cart cart, Member member, Promotion promotion) {
         boolean selectingCategory = true;
 
         while (selectingCategory) {
@@ -99,15 +85,8 @@ public class Menu {
                 if (choice == 8) {
                     selectingCategory = false; // ย้อนกลับไปที่เมนูหลัก
                 } else if (choice > 0 && choice <= 7) {
-                    String[] sortedCategories = {
-                            "Hot Coffee",
-                            "Iced Coffee",
-                            "Hot Tea",
-                            "Iced Tea",
-                            "Hot Non-Coffee",
-                            "Iced Non-Coffee",
-                            "Special"
-                    };
+                    String[] sortedCategories = { "Hot Coffee", "Iced Coffee", "Hot Tea", "Iced Tea", "Hot Non-Coffee",
+                            "Iced Non-Coffee", "Special" };
                     String selectedCategory = sortedCategories[choice - 1];
                     boolean selectingItem = true;
 
@@ -119,7 +98,7 @@ public class Menu {
                         if (itemChoice == 9) {
                             selectingItem = false; // ย้อนกลับไปที่หมวดหมู่เมนู
                         } else if (itemChoice > 0 && itemChoice <= categories.get(selectedCategory).length) {
-                            selectItem(selectedCategory, itemChoice, cart, member, receipt, promotion);
+                            selectItem(selectedCategory, itemChoice, cart, member, promotion);
                             selectingItem = false; // ออกจากลูปเพื่อกลับไปยังเมนูหลัก
                             selectingCategory = false; // ออกจากลูปเพื่อกลับไปยังเมนูหลัก
                         } else {
@@ -137,8 +116,7 @@ public class Menu {
         }
     }
 
-    public void selectItem(String category, int itemChoice, Cart cart, Member member, Receipt receipt,
-            Promotion promotion) {
+    public void selectItem(String category, int itemChoice, Cart cart, Member member, Promotion promotion) {
         try {
             String[] items = categories.get(category);
             int[] itemPrices = prices.get(category);
@@ -146,16 +124,15 @@ public class Menu {
             String selectedItem = items[itemChoice - 1];
             int itemPrice = itemPrices[itemChoice - 1];
 
-            // Ask for the number of cups
             System.out.print("Enter the number of cups: ");
             int quantity = scanner.nextInt();
 
-            // Select sweetness level
             String sweetness = selectSweetnessLevel();
 
             if (sweetness != null) {
                 boolean selecting = true;
                 boolean promotionApplied = false; // ใช้ตัวแปรนี้ในการติดตามการใช้โปรโมชั่น
+                String spinPromotion = null; // เพิ่มตัวแปรนี้เพื่อเก็บโปรโมชั่นจาก Spin
 
                 while (selecting) {
                     System.out.println("===================================");
@@ -182,11 +159,11 @@ public class Menu {
                             member.addPoints(quantity);
                             System.out.println(quantity + " x " + selectedItem + " with " + sweetness + " ordered.");
 
-                            receipt = new Receipt(cart, promotionApplied); // อัปเดต Receipt พร้อมโปรโมชั่น
+                            Receipt receipt = new Receipt(cart, promotionApplied, spinPromotion); // อัปเดต Receipt
+                                                                                                  // พร้อมโปรโมชั่น
                             receipt.displayReceipt();
                             cart.clearCart();
 
-                            // Return to the Welcome page
                             return;
 
                         case 3:
@@ -199,7 +176,7 @@ public class Menu {
                             System.out.print("Select Delivery: ");
                             int deliveryChoice = scanner.nextInt();
                             String deliveryOption = deliveryChoice == 1 ? "Standard Delivery" : "Express Delivery";
-                            int deliveryFee = deliveryChoice == 1 ? 15 : 20; // Update deliveryFee based on user choice
+                            int deliveryFee = deliveryChoice == 1 ? 15 : 20;
 
                             System.out.print("Enter delivery address: ");
                             scanner.nextLine(); // Clear the buffer
@@ -208,15 +185,11 @@ public class Menu {
                             System.out.print("Enter your phone number: ");
                             String phoneNumber = scanner.nextLine();
 
-                            receipt = new Receipt(cart, promotionApplied); // สร้าง Receipt
-                                                                           // ใหม่ทุกครั้งที่มีการยืนยันการสั่งซื้อ
+                            receipt = new Receipt(cart, promotionApplied, spinPromotion);
                             receipt.setDeliveryDetails(deliveryOption, address, phoneNumber, deliveryFee);
-
-                            // แสดงใบเสร็จพร้อมโปรโมชั่น
                             receipt.displayReceipt();
                             cart.clearCart();
 
-                            // Return to the Welcome page
                             return;
 
                         case 4:
@@ -228,6 +201,7 @@ public class Menu {
                             if (promotionOption > 0 && promotionOption <= promotion.getAvailablePromotions().size()) {
                                 System.out.println("Promotion applied.");
                                 promotionApplied = true; // อัปเดตสถานะการใช้โปรโมชั่น
+                                spinPromotion = promotion.getAvailablePromotions().get(promotionOption - 1); // กำหนดโปรโมชั่นที่เลือก
                                 promotion.removePromotion(promotionOption - 1); // ลบโปรโมชั่นที่ใช้ไปแล้วออกจากรายการ
                             } else {
                                 System.out.println("Invalid promotion selection.");

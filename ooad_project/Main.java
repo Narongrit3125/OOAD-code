@@ -5,13 +5,14 @@ public class Main {
     public static boolean orderConfirmed = false;
     public static boolean promotionApplied = false;
     public static Receipt lastReceipt = null;
+    public static String spinPromotion;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
         // สร้างออบเจ็กต์สำหรับแต่ละคลาส
         Cart cart = new Cart(scanner);
-        Member member = new Member("Mr. Jame", new Point(10)); // ตัวอย่างข้อมูลสมาชิก
+        Member member = new Member("Mr. Jame", new Point(999)); // ตัวอย่างข้อมูลสมาชิก
         Promotion promotion = new Promotion();
         Menu menu = new Menu(scanner);
         Spin spin = new Spin();
@@ -49,7 +50,7 @@ public class Main {
                     case 3:
                         if (!orderConfirmed) {
                             promotionApplied = false; // Reset promotion applied status before selecting menu
-                            menu.selectCategory(cart, member, lastReceipt, promotion);
+                            menu.selectCategory(cart, member, promotion);
                         } else {
                             System.out.println("Order already confirmed. Please view receipt or make a new order.");
                         }

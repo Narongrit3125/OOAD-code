@@ -152,8 +152,9 @@ public class Cart {
     
         member.addPoints(pointsEarned); // เพิ่มคะแนนให้กับสมาชิก
         Main.orderConfirmed = true; // ตั้งค่าสถานะการยืนยันคำสั่งซื้อ
-        Main.lastReceipt = new Receipt(this, Main.promotionApplied); // บันทึกใบเสร็จ
-    
+        Main.lastReceipt = new Receipt(this, Main.promotionApplied, Main.spinPromotion);
+        // บันทึกใบเสร็จ
+
         System.out.println("Order confirmed! Thank you for your purchase.");
     }
 

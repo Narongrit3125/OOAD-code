@@ -4,12 +4,13 @@ import java.util.List;
 public class Receipt {
     private Cart cartSnapshot;
     private boolean promotionApplied;
+    private String spinPromotion; // เพิ่มตัวแปรเพื่อเก็บโปรโมชั่นจาก Spin
     private String deliveryOption;
     private String address;
     private String phoneNumber;
     private int deliveryCharge;
 
-    public Receipt(Cart cart, boolean promotionApplied) {
+    public Receipt(Cart cart, boolean promotionApplied, String spinPromotion) {
         this.cartSnapshot = new Cart(new Scanner(System.in));
 
         if (cart.getItems() != null && cart.getPrices() != null && cart.getQuantities() != null) {
@@ -19,6 +20,7 @@ public class Receipt {
         }
 
         this.promotionApplied = promotionApplied;
+        this.spinPromotion = spinPromotion; // กำหนดโปรโมชั่นจาก Spin
         this.deliveryCharge = 0;
     }
 
@@ -61,7 +63,14 @@ public class Receipt {
             System.out.println("Discount (10%): -$" + discount);
         }
 
-        double finalTotal = subtotal - discount + deliveryCharge;
+        // คำนวณส่วนลดจาก Spin Promotion
+        double spinDiscount = 0;
+        if (spinPromotion != null && !spinPromotion.equals("Nothing")) {
+            spinDiscount = new Promotion().applySpinDiscount(subtotal, spinPromotion);
+            System.out.println("Spin Promotion Discount: -$" + spinDiscount);
+        }
+
+        double finalTotal = subtotal - discount - spinDiscount + deliveryCharge;
         System.out.println("Delivery Fee: $" + deliveryCharge);
         System.out.println("Total Price: $" + finalTotal);
         System.out.println("===================================");

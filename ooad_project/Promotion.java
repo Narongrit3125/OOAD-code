@@ -16,9 +16,12 @@ public class Promotion {
     }
 
     public void setSpinPromotion(String spinPromotion) {
-        this.spinPromotion = spinPromotion;
-        if (spinPromotion != null && !availablePromotions.contains(spinPromotion)) { // ตรวจสอบว่ามีโปรโมชั่นนี้อยู่แล้วหรือไม่
-            this.availablePromotions.add(spinPromotion); // เพิ่มโปรโมชั่นจาก Spin ถ้ายังไม่มี
+        // ตรวจสอบถ้า spinPromotion ไม่ใช่ "Nothing" ค่อยเพิ่มเข้าไปในรายการ
+        if (spinPromotion != null && !spinPromotion.equals("Nothing")) {
+            this.spinPromotion = spinPromotion;
+            if (!availablePromotions.contains(spinPromotion)) {
+                this.availablePromotions.add(spinPromotion);
+            }
         }
     }
 
@@ -39,6 +42,22 @@ public class Promotion {
             return total * 0.10; // คืนค่า 10% ของยอดรวมเป็นส่วนลด
         }
         return 0; // ถ้าไม่เข้าเงื่อนไข คืนค่า 0 แปลว่าไม่มีส่วนลด
+    }
+
+    public double applySpinDiscount(double total, String spinPromotion) {
+        if (spinPromotion != null) {
+            switch (spinPromotion) {
+                case "10 Baht Discount":
+                    return 10.0;
+                case "20 Baht Discount":
+                    return 20.0;
+                case "30 Baht Discount":
+                    return 30.0;
+                default:
+                    return 0;
+            }
+        }
+        return 0;
     }
 
     public void resetSpinPromotion() {
