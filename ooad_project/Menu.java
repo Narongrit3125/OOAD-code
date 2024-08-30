@@ -202,6 +202,52 @@ public class Menu {
                                 System.out.println("Promotion applied.");
                                 promotionApplied = true; // อัปเดตสถานะการใช้โปรโมชั่น
                                 spinPromotion = promotion.getAvailablePromotions().get(promotionOption - 1); // กำหนดโปรโมชั่นที่เลือก
+
+                                // ตรวจสอบว่าเป็นโปรโมชั่น "1 Free Drink" หรือไม่
+                                if (spinPromotion.equals("1 Free Drink")) {
+                                    // ให้ผู้ใช้เลือกหมวดหมู่เครื่องดื่มก่อน
+                                    boolean selectingFreeDrinkCategory = true;
+                                    while (selectingFreeDrinkCategory) {
+                                        System.out.println("You have earned a free drink! Select a category:");
+                                        String[] sortedCategories = { "Hot Coffee", "Iced Coffee", "Hot Tea",
+                                                "Iced Tea", "Hot Non-Coffee", "Iced Non-Coffee", "Special" };
+                                        for (int i = 0; i < sortedCategories.length; i++) {
+                                            System.out.println((i + 1) + ". " + sortedCategories[i]);
+                                        }
+                                        System.out.print("Select a category by number: ");
+                                        int categoryChoice = scanner.nextInt();
+
+                                        if (categoryChoice >= 1 && categoryChoice <= sortedCategories.length) {
+                                            String selectedCategory = sortedCategories[categoryChoice - 1];
+
+                                            // แสดงเมนูของหมวดหมู่ที่เลือก
+                                            displayMenuByCategory(selectedCategory);
+
+                                            System.out.print("Select a drink number: ");
+                                            int freeDrinkChoice = scanner.nextInt();
+
+                                            if (freeDrinkChoice == 9) {
+                                                selectingFreeDrinkCategory = false; // กลับไปเลือกหมวดหมู่ใหม่
+                                            } else if (freeDrinkChoice > 0
+                                                    && freeDrinkChoice <= categories.get(selectedCategory).length) {
+                                                String freeDrink = categories.get(selectedCategory)[freeDrinkChoice
+                                                        - 1];
+                                                int freeDrinkPrice = prices.get(selectedCategory)[freeDrinkChoice - 1];
+
+                                                // เพิ่มเครื่องดื่มฟรีลงในตะกร้าและตั้งราคาของเครื่องดื่มฟรีเป็น $0
+                                                cart.addItem(freeDrink + " (Free Drink)", 0, 1);
+                                                System.out.println(
+                                                        "You have selected " + freeDrink + " as your free drink.");
+                                                selectingFreeDrinkCategory = false; // ออกจากลูปการเลือกเครื่องดื่มฟรี
+                                            } else {
+                                                System.out.println("Invalid choice. Please select again.");
+                                            }
+                                        } else {
+                                            System.out.println("Invalid category selection. Please select again.");
+                                        }
+                                    }
+                                }
+
                                 promotion.removePromotion(promotionOption - 1); // ลบโปรโมชั่นที่ใช้ไปแล้วออกจากรายการ
                             } else {
                                 System.out.println("Invalid promotion selection.");

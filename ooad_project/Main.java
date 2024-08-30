@@ -12,7 +12,7 @@ public class Main {
 
         // สร้างออบเจ็กต์สำหรับแต่ละคลาส
         Cart cart = new Cart(scanner);
-        Member member = new Member("Mr. Jame", new Point(999)); // ตัวอย่างข้อมูลสมาชิก
+        Member member = new Member("Mr. Jame", new Point(99)); // ตัวอย่างข้อมูลสมาชิก
         Promotion promotion = new Promotion();
         Menu menu = new Menu(scanner);
         Spin spin = new Spin();
